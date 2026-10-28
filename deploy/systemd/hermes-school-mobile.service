@@ -1,0 +1,21 @@
+[Unit]
+Description=Hermes School private HTTPS backend for Tailscale Serve
+After=network.target
+
+[Service]
+User=hermes-school
+Group=hermes-school
+WorkingDirectory=/opt/hermes-school
+EnvironmentFile=/etc/hermes-school/environment
+EnvironmentFile=/etc/hermes-school/mobile.environment
+ExecStart=/opt/hermes-school/.venv/bin/hermes-school dashboard --port 8767
+Restart=on-failure
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/hermes-school
+
+[Install]
+WantedBy=multi-user.target

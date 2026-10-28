@@ -1,0 +1,9 @@
+#!/bin/sh
+# Install root-owned at /usr/local/libexec/hermes-school-mcp.
+# The only permitted operation is the local stdio MCP server.
+set -eu
+[ "$#" -eq 0 ] || exit 64
+export HERMES_SCHOOL_DATA=/var/lib/hermes-school
+export PYTHONNOUSERSITE=1
+cd /opt/hermes-school
+exec /opt/hermes-school/.venv/bin/hermes-school mcp

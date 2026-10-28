@@ -1,0 +1,19 @@
+[Unit]
+Description=Hermes School incremental sync
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=hermes-school
+Group=hermes-school
+WorkingDirectory=/opt/hermes-school
+EnvironmentFile=/etc/hermes-school/environment
+ExecStart=/usr/bin/flock -n /var/lib/hermes-school/sync.lock /opt/hermes-school/.venv/bin/hermes-school sync
+TimeoutStartSec=20min
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/hermes-school

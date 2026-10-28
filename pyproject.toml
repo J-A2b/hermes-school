@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hermes-school"
+version = "0.1.0"
+description = "Collecteur scolaire local et privé"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.11"
+dependencies = ["Flask>=3.1,<4", "requests>=2.32,<3", "waitress>=3,<4", "cryptography>=44", "tzdata>=2025.1"]
+
+[project.optional-dependencies]
+test = ["pytest>=8,<10"]
+documents = ["pypdf>=5", "python-docx>=1.1"]
+mcp = ["mcp>=1.12,<2"]
+
+[project.scripts]
+hermes-school = "hermes_school.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+hermes_school = ["dashboard/templates/*.html", "dashboard/static/*", "storage/*.sql"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

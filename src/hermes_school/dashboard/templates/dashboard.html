@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{title}} · Hermes School</title>
+<link rel="stylesheet" href="/static/style.css">
+<script src="/static/app.js" defer>
+</script>
+</head>
+<body>
+<aside>
+<a class="brand" href="/">H<span>HERMES<br>SCHOOL</span>
+</a>
+<p class="eyebrow">MON ESPACE</p>
+<nav>{% for key,label in pages.items() %}<a href="{{ '/' if key=='overview' else '/page/'+key }}" class="{{'active' if page==key else ''}}">
+<span>{{['◈','▥','✓','▦','▤','✉','↻','◎','⚙'][loop.index0]}}</span>{{label}}</a>{% endfor %}</nav>
+<div class="aside-bottom">
+<span class="dot">
+</span> Vos données restent ici<p>Hermes School · 0.1</p>
+<button type="button" id="theme">Changer le thème ◐</button>
+<form action="/logout" method="post">
+<input type="hidden" name="csrf" value="{{session.csrf}}">
+<button class="secondary">Déconnexion</button>
+</form>
+</div>
+</aside>
+<main>
+<header>
+<div>
+<p class="eyebrow">VOTRE QUOTIDIEN, EN PLUS CLAIR</p>
+<h1>{{title}}</h1>
+</div>
+<span class="pill">● Espace local privé</span>
+</header>{% if demo %}<div class="banner">DÉMONSTRATION — Données fictives. Aucune connexion ÉcoleDirecte active.</div>{% endif %}
+{% if page=='overview' %}<section class="hero">
+<div>
+<p class="eyebrow">CHAQUE JOUR, UN PEU PLUS LOIN</p>
+<h2>Une vue claire.<br>Du temps pour apprendre.</h2>
+<p>Devoirs, cours et résultats, réunis au même endroit.</p>
+<a class="button" href="/page/assignments">Préparer ma journée ↗</a>
+</div>
+<div class="hero-mark" aria-hidden="true">H<span>✦</span>
+</div>
+</section>
+<div class="stats">{% for key,label in [('assignments','Devoirs enregistrés'),('assessments','Évaluations annoncées'),('grades','Notes archivées'),('timetable','Créneaux de cours')] %}<a class="stat" href="/page/{{ 'assignments' if key=='assessments' else key }}">
+<span>{{label}}</span>
+<strong>{{counts.get(key,0)}}</strong>
+<small>Consulter les détails ↗</small>
+</a>{% endfor %}</div>
+<div class="columns">
+<section class="panel">
+<div class="section-head">
+<h2>À venir</h2>
+<a href="/page/assignments">Tout voir →</a>
+</div>{% for r in context['items'][:8] %}<div class="row">
+<span class="subject-icon">{{r.subject[:1]}}</span>
+<div>
+<strong>{{r.title}}</strong>
+<p>{{r.date}} · {{'Évaluation' if r.kind=='assessments' else 'Cours' if r.kind=='timetable' else 'Devoir'}} · {{r.estimate.minutes}} min <small>({{r.estimate.method}})</small>
+</p>
+</div>
+</div>{% else %}<div class="empty">Votre prochaine étape commence ici.<p>Connectez ÉcoleDirecte puis lancez une synchronisation.</p>
+</div>{% endfor %}</section>
+<section class="panel">
+<h2>Dernières informations</h2>{% for c in changes[:5] %}<div class="row">
+<div>
+<strong>{{c.title}}</strong>
+<p>{{c.action}} · {{c.created_at[:10]}}</p>
+</div>
+</div>{% else %}<p class="empty">Les changements apparaîtront ici.</p>{% endfor %}<div class="sync-status">
+<span class="dot">
+</span> Synchronisation : {{status.status if status else 'jamais exécutée'}}<p>{{status.finished_at if status else 'En attente de configuration'}}</p>
+</div>
+</section>
+</div>
+{% include 'overview_extra.html' %}
+{% elif page=='settings' %}<section class="panel">
+<h2>Votre rythme</h2>
+<form method="post" action="/settings">
+<input type="hidden" name="csrf" value="{{session.csrf}}">{% for key,label in [('sync_times','Synchronisations (HH:MM séparés par des virgules)'),('quiet_start','Début du silence nocturne'),('quiet_end','Fin du silence nocturne'),('friday_time','Bilan du vendredi')] %}<label>{{label}}<input name="{{key}}" value="{{settings[key]}}" required>
+</label>{% endfor %}<button>Enregistrer les préférences</button>
+</form>
+<p>Fuseau : Europe/Paris. Après modification des horaires, régénérer les timers avec <code>hermes-school timers</code>. Aucun envoi de notification n’est activé.</p>
+<p>Sauvegarde chiffrée : commande <code>hermes-school backup</code>. Rétention actuelle : {{settings.retention_days}} jours, purge automatique désactivée.</p>
+</section>
+{% elif page=='organization' %}<div class="columns">
+<section class="panel">
+<h2>Mes tâches personnelles</h2>{% for t in tasks %}<form class="row" action="/tasks/{{t.id}}/toggle" method="post">
+<input type="hidden" name="csrf" value="{{session.csrf}}">
+<button class="secondary">{{'✓' if t.done else '○'}}</button>
+<span>{{t.title}} · {{t.estimated_minutes}} min · priorité {{t.priority}}</span>
+</form>{% else %}<p>Aucune tâche personnelle.</p>{% endfor %}<form action="/tasks" method="post">
+<input type="hidden" name="csrf" value="{{session.csrf}}">
+<label>Nouvelle tâche<input name="title" required maxlength="300">
+</label>
+<label>Durée prévue (minutes)<input name="minutes" type="number" min="1" max="1440" value="30">
+</label>
+<label>Priorité<select name="priority">
+<option value="1">Haute</option>
+<option value="2" selected>Normale</option>
+<option value="3">Basse</option>
+</select>
+</label>
+<button>Ajouter</button>
+</form>
+</section>
+<section class="panel">
+<h2>Préparer le week-end</h2>
+<p>{{context['items']|length}} éléments dans les deux prochaines semaines.</p>
+<p>Le contexte JSON est accessible avec <code>hermes-school friday</code>. Les estimations s’affinent avec vos sessions.</p>
+{% include 'planning.html' %}
+</section>
+</div>
+{% elif page=='changes' %}<section class="panel">
+<h2>Journal des changements</h2>{% for c in changes %}<details class="row">
+<summary>{{c.created_at[:16]}} · {{c.title}} · {{c.action}}</summary>
+<p>Version précédente</p>
+<pre>{{c.old_payload or 'Premier enregistrement'}}</pre>
+<p>Version enregistrée</p>
+<pre>{{c.new_payload}}</pre>
+</details>{% else %}<p>Aucun changement enregistré.</p>{% endfor %}</section>
+{% else %}<form class="filters" method="get">
+<input name="q" value="{{request.args.get('q','')}}" placeholder="Rechercher…" aria-label="Recherche">
+<select name="subject" aria-label="Matière">
+<option value="">Toutes les matières</option>{% for s in subjects %}<option {{'selected' if request.args.get('subject')==s else ''}}>{{s}}</option>{% endfor %}</select>
+{% if page=='grades' %}<select name="period" aria-label="Période"><option value="">Toutes les périodes</option>{% for p in periods %}<option {{'selected' if request.args.get('period')==p else ''}}>{{p}}</option>{% endfor %}</select>{% endif %}
+{% if page in ['assignments','timetable'] %}<input type="date" name="day" value="{{request.args.get('day','')}}" aria-label="Jour">{% endif %}
+<button>Filtrer</button>{% if page in ['assignments','timetable'] %}<button type="button" class="secondary" id="calendar-toggle">Vue calendrier</button>{% endif %}</form>{% if page=='grades' %}<p class="notice">Moyenne générale non calculée : les règles de pondération de l’établissement ne sont pas vérifiées.</p>
+<section class="panel">
+<h2>Évolution des notes /20</h2>
+<div class="stats">{% for average in averages %}<div class="stat"><span>{{average.subject}} · {{average.period}}</span><strong>{{average.average if average.average is not none else '—'}}<small> /20</small></strong><small>{{average.count}} notes · {{average.label if average.average is not none else 'Coefficients manquants : calcul indisponible'}}</small></div>{% endfor %}</div>
+<div class="chart">{% for r in items|reverse if r.data.out_of_20 is not none %}<div class="chart-column">
+<span>{{r.data.out_of_20|round(1)}}</span>
+<meter min="0" max="20" value="{{r.data.out_of_20}}">{{r.data.out_of_20}}</meter>
+<small>{{r.date or ''}}</small>
+</div>{% endfor %}</div>
+</section>{% endif %}{% if page=='messages' %}<p class="notice">Lecture locale uniquement. Collecte distante désactivée tant que l’absence d’effet sur le statut de lecture n’est pas validée.</p>{% endif %}<section class="panel record-list">
+<div class="section-head">
+<h2>{{title}}</h2>
+<span>{{items|length}} éléments</span>
+</div>{% for r in items %}<article class="record" data-date="{{r.date or ''}}">
+<div class="row">
+<span class="subject-icon">{{r.subject[:1] or '·'}}</span>
+<div>
+<small>{{r.subject}} · {{r.date or 'Date non fournie'}}</small>
+<h3>{{r.title}}</h3>
+</div>{% if page=='grades' %}<strong class="grade">{{r.data.raw.valeur}}<small> / {{r.data.maximum or '?'}}</small>
+</strong>{% endif %}</div>{% if r.data.description %}<p class="description">{{r.data.description}}</p>{% endif %}{% if page=='timetable' %}<p>{{r.data.end}} · {{r.data.raw.get('prof','')}} · {{r.data.raw.get('salle','')}} {{'ANNULÉ' if r.data.raw.get('isAnnule') else ''}} {{'MODIFIÉ' if r.data.raw.get('isModifie') else ''}}</p>{% endif %}{% if page=='grades' %}<p>Coefficient {{r.data.coefficient if r.data.coefficient is not none else 'inconnu'}} · Période {{r.data.period}} · Moyenne classe {{r.data.class_average or 'non fournie'}}</p>{% endif %}{% if page=='assignments' %}<form action="/assignments/{{r.id}}/done" method="post">
+<input type="hidden" name="csrf" value="{{session.csrf}}">
+<button class="secondary">{% set done=tasks|selectattr('record_id','equalto',r.id)|selectattr('done')|list %}{{'✓ Terminé — réouvrir' if done else 'Marquer comme terminé'}} (local)</button>
+</form>{% include 'assignment_plan.html' %}{% endif %}<details>
+<summary>Provenance et données originales</summary>
+<p>{{r.source}} · {{r.source_id}} · {{r.data.endpoint}}</p>
+<pre>{{r.data|tojson(indent=2)}}</pre>
+</details>
+</article>{% else %}<div class="empty">Aucune donnée pour le moment.<p>Les informations synchronisées s’afficheront ici.</p>
+</div>{% endfor %}</section>{% if page=='lessons' %}<section class="panel">
+<h2>Bibliothèque documentaire</h2>{% for d in documents %}<div class="row">
+<div>
+<a href="/documents/{{d.id}}">{{d.name}} ↓</a>
+<p>{{d.excerpt}}</p>
+<small>{{d.provenance}}</small>
+</div>
+</div>{% else %}<p>Aucun document importé. Utilisez <code>hermes-school document</code>.</p>{% endfor %}</section>{% endif %}{% endif %}<footer>Hermes School · Vos données scolaires, sous votre contrôle.</footer>
+</main>
+</body>
+</html>

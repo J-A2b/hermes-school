@@ -1,0 +1,5 @@
+# Place in /etc/hermes-school/environment (0600), never put credentials here.
+HERMES_SCHOOL_DATA=/var/lib/hermes-school
+ED_API_VERSION=4.101.4
+# HTTPS reverse proxy only; leave off for an SSH tunnel to localhost.
+HERMES_SCHOOL_HTTPS=0

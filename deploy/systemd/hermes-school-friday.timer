@@ -1,0 +1,7 @@
+[Unit]
+Description=Contexte scolaire du vendredi à 19h Paris
+[Timer]
+OnCalendar=Fri *-*-* 19:00:00 Europe/Paris
+Persistent=true
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,14 @@
+[Unit]
+Description=Hermes School Friday structured context
+[Service]
+Type=oneshot
+User=hermes-school
+Group=hermes-school
+WorkingDirectory=/opt/hermes-school
+EnvironmentFile=/etc/hermes-school/environment
+ExecStart=/opt/hermes-school/.venv/bin/hermes-school friday --output /var/lib/hermes-school/friday.json
+UMask=0077
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/hermes-school

@@ -1,0 +1,14 @@
+[Unit]
+Description=Hermes School encrypted backup
+[Service]
+Type=oneshot
+User=hermes-school
+Group=hermes-school
+WorkingDirectory=/opt/hermes-school
+EnvironmentFile=/etc/hermes-school/environment
+ExecStart=/opt/hermes-school/.venv/bin/hermes-school backup --key-file /var/lib/hermes-school/backup.key --output /var/lib/hermes-school/backups/latest.enc
+UMask=0077
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/hermes-school

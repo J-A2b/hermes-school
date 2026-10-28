@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="240" viewBox="0 0 1200 240" role="img" aria-labelledby="title">
+<title id="title">De la source scolaire à l’assistant Hermes, par une base locale</title><rect width="1200" height="240" rx="20" fill="#f1f5ef"/>
+<g stroke="#8ba18c" stroke-width="3" fill="none"><path d="M220 120h65M490 120h65M760 120h65"/></g><g fill="#42634f"><path d="M285 120l-10-7v14zM555 120l-10-7v14zM825 120l-10-7v14z"/></g>
+<g fill="#fff" stroke="#d4dfd2"><rect x="25" y="60" width="195" height="120" rx="14"/><rect x="285" y="60" width="205" height="120" rx="14"/><rect x="555" y="60" width="205" height="120" rx="14"/><rect x="825" y="60" width="350" height="120" rx="14"/></g>
+<g font-family="Arial,sans-serif" text-anchor="middle"><g fill="#244431" font-size="23" font-weight="bold"><text x="122" y="108">ÉcoleDirecte</text><text x="387" y="108">Collecteur</text><text x="657" y="108">SQLite locale</text><text x="1000" y="108">Hermes Agent · MCP</text></g><g fill="#687969" font-size="15"><text x="122" y="142">Compte autorisé</text><text x="387" y="142">Validation et historique</text><text x="657" y="142">Dashboard et documents</text><text x="1000" y="142">Contexte sourcé et organisation</text></g></g>
+</svg>

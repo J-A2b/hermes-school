@@ -1,0 +1,26 @@
+name: Signaler un bug
+description: Problème reproductible avec des données synthétiques ou anonymisées.
+body:
+  - type: markdown
+    attributes:
+      value: "Ne joignez aucun identifiant, token, clé, base réelle ou document scolaire. Pour une vulnérabilité, consulter SECURITY.md."
+  - type: input
+    id: environment
+    attributes:
+      label: Environnement
+      description: Système, version Python et version du projet.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Étapes et fixture synthétique, sans données personnelles.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Résultat attendu et résultat observé
+    validations:
+      required: true

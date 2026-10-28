@@ -1,0 +1,9 @@
+<details><summary>Organiser ce devoir</summary>
+{% set personal=tasks|selectattr('record_id','equalto',r.id)|first %}
+<form method="post" action="/assignments/{{r.id}}/plan">
+<input type="hidden" name="csrf" value="{{session.csrf}}">
+<label>Durée estimée en minutes<input type="number" name="minutes" min="1" max="1440" value="{{personal.estimated_minutes if personal else 30}}" required></label>
+<label>Priorité<select name="priority">{% for p,label in [(1,'Haute'),(2,'Normale'),(3,'Basse')] %}<option value="{{p}}" {{'selected' if (personal.priority if personal else 2)==p else ''}}>{{label}}</option>{% endfor %}</select></label>
+<label>Session prévue<input type="datetime-local" name="scheduled_at" value="{{personal.scheduled_at if personal and personal.scheduled_at else ''}}"></label>
+<button>Enregistrer mon organisation</button>
+</form></details>
