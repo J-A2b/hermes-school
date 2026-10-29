@@ -1,3 +1,6 @@
+<script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support me on Ko-fi', '#72a4f2', 'A8D729OSP8');kofiwidget2.draw();</script> 
+
+
 <p align="center"><img src="docs/images/banner.svg" alt="Hermes School — vos données scolaires, votre assistant" width="100%"></p>
 
 # Hermes School
