@@ -1,5 +1,4 @@
-<script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support me on Ko-fi', '#72a4f2', 'A8D729OSP8');kofiwidget2.draw();</script> 
-
+<a href="https://ko-fi.com/A8D729OSP8" target="_blank"><img src="https://storage.ko-fi.com/cdn/kofi2.png?v=6" height="36" alt="Support me on Ko-fi" style="border:0;" /></a>
 
 <p align="center"><img src="docs/images/banner.svg" alt="Hermes School — vos données scolaires, votre assistant" width="100%"></p>
 
@@ -7,7 +6,7 @@
 
 **La base scolaire locale de votre [Hermes Agent](https://hermes-agent.nousresearch.com/docs).**
 
-Hermes School récupère vos données accessibles sur ÉcoleDirecte, conserve leur historique dans SQLite et les rend consultables par Hermes Agent via MCP. Le but : donner à votre assistant des informations scolaires sourcées pour préparer vos révisions et organiser votre travail du week-end.
+Hermes School récupère vos données accessibles sur ÉcoleDirecte, conserve leur historique dans SQLite et les rend consultables par Hermes Agent via MCP. Le but : donner à votre assistant des informations utiles sans nécessiter de transférer votre base scolaire dans un service externe.
 
 Un dashboard français permet également de consulter les données et de renseigner vos tâches, disponibilités et sessions de travail.
 
@@ -15,11 +14,11 @@ Un dashboard français permet également de consulter les données et de renseig
 
 [Démarrer](#démarrage-rapide) · [Brancher Hermes](docs/HERMES.md) · [Déployer](docs/INSTALLATION.md) · [Limites](docs/ROADMAP.md) · [Contribuer](CONTRIBUTING.md)
 
-> Projet indépendant et non officiel. L’API interne d’ÉcoleDirecte peut évoluer. Vérifiez les conditions d’utilisation applicables. Les protections de connexion ne sont pas contournées : un QCM éventuel exige votre intervention.
+> Projet indépendant et non officiel. L’API interne d’ÉcoleDirecte peut évoluer. Vérifiez les conditions d’utilisation applicables. Les protections de connexion ne sont pas contournées : un accès au compte reste soumis à vos identifiants et à son propre fonctionnement.
 
 ## Pourquoi l’utiliser avec Hermes ?
 
-Un assistant ne connaît pas vos prochains contrôles, les consignes d’un devoir ou les changements d’emploi du temps. Hermes School lui fournit une mémoire scolaire consultable, avec les dates de synchronisation et la provenance des informations.
+Un assistant ne connaît pas vos prochains contrôles, les consignes d’un devoir ou les changements d’emploi du temps. Hermes School lui fournit une mémoire scolaire consultable, avec les dates d’échéance, les évaluations et le contexte administratif.
 
 Vous pouvez lui demander :
 
@@ -29,7 +28,7 @@ Vous pouvez lui demander :
 >
 > « Quels changements ont été détectés depuis ma dernière consultation ? »
 
-La collecte et la préparation du contexte fonctionnent sans modèle IA. **Hermes intervient ensuite pour expliquer, proposer et accompagner**, à partir des outils que vous lui autorisez. Le dashboard fonctionne aussi sans Hermes.
+La collecte et la préparation du contexte fonctionnent sans modèle IA. **Hermes intervient ensuite pour expliquer, proposer et accompagner**, à partir des outils que vous lui autorisez. Le dashboard local reste un outil de consultation et de saisie, pas une commande automatique.
 
 <p align="center"><img src="docs/images/architecture.svg" alt="ÉcoleDirecte vers le collecteur, SQLite, le dashboard et Hermes Agent via MCP" width="100%"></p>
 
@@ -39,7 +38,7 @@ Ces captures proviennent de la vraie interface exécutée avec **des données fi
 
 ![Accueil du dashboard en démonstration](docs/images/dashboard-desktop.png)
 
-<table><tr><td width="70%"><img src="docs/images/grades-dark.png" alt="Notes de démonstration en mode sombre"></td><td width="30%"><img src="docs/images/dashboard-mobile.png" alt="Dashboard de démonstration sur mobile"></td></tr></table>
+<table><tr><td width="70%"><img src="docs/images/grades-dark.png" alt="Notes de démonstration en mode sombre"></td><td width="30%"><img src="docs/images/dashboard-mobile.png" alt="Dashboard de démonstration en mode mobile"></td></tr></table>
 
 ## Ce qui est disponible
 
@@ -54,7 +53,7 @@ Ces captures proviennent de la vraie interface exécutée avec **des données fi
 | Hermes / MCP | Dix outils de lecture et un outil optionnel pour le statut d’une tâche personnelle |
 | Exploitation | CLI, services/timers systemd, sauvegarde chiffrée et restauration vérifiable |
 
-La collecte distante des messages est désactivée. Les documents scannés ne sont pas OCRisés. Les moyennes indicatives ne remplacent pas le bulletin officiel. La préparation du vendredi n’envoie aucun message automatiquement. Voir [les limites détaillées](docs/ROADMAP.md).
+La collecte distante des messages est désactivée. Les documents scannés ne sont pas OCRisés. Les moyennes indicatives ne remplacent pas le bulletin officiel. La préparation du vendredi n’envoie pas d’e-mail sans votre validation explicite.
 
 ## Démarrage rapide
 
@@ -84,7 +83,7 @@ $env:HERMES_SCHOOL_DATA = "$PWD\data\reel"
 .venv\Scripts\hermes-school dashboard
 ```
 
-Ouvrir **http://127.0.0.1:8765**. `init` définit le mot de passe du dashboard ; `login` demande les identifiants ÉcoleDirecte dans le terminal, puis le choix de l’élève. Ces mots de passe sont distincts. Ne mettez jamais vos identifiants dans un prompt IA.
+Ouvrir **http://127.0.0.1:8765**. `init` définit le mot de passe du dashboard ; `login` demande les identifiants ÉcoleDirecte dans le terminal, puis le choix de l’élève. Ces mots de passe sont chiffrés localement et ne sont pas exposés dans le dépôt.
 
 ### Essayer sans compte scolaire
 
@@ -97,7 +96,7 @@ export HERMES_SCHOOL_DATA="$PWD/data/demo"
 .venv/bin/hermes-school dashboard
 ```
 
-Sous PowerShell, utilisez `$env:HERMES_SCHOOL_DATA = "$PWD\data\demo"` et les exécutables de `.venv\Scripts\`. Le mode démonstration est explicite ; il ne remplace jamais silencieusement une panne de l’API.
+Sous PowerShell, utilisez `$env:HERMES_SCHOOL_DATA = "$PWD\data\demo"` et les exécutables de `.venv\Scripts\`. Le mode démonstration est explicite ; il ne remplace jamais silencieusement une panne d’authentification ni une donnée réelle.
 
 ## Connecter Hermes Agent
 
@@ -155,7 +154,7 @@ Utilisez l’exécutable de votre venv et le bon `HERMES_SCHOOL_DATA`. Sous syst
 
 Le dashboard écoute par défaut sur **127.0.0.1**. Accédez-y par tunnel SSH ou configurez un accès privé HTTPS avec Tailscale Serve. Ne publiez pas votre base scolaire sur un hébergement public.
 
-Les secrets et données persistantes sont exclus du dépôt. Les identifiants sont chiffrés localement, avec une clé présente sur la même machine ; cela ne protège pas contre une compromission du compte système. Les sauvegardes nécessitent une clé à conserver séparément. Consultez [SECURITY.md](SECURITY.md).
+Les secrets et données persistantes sont exclus du dépôt. Les identifiants sont chiffrés localement, avec une clé présente sur la même machine ; cela ne protège pas contre une compromission du système ni un accès non autorisé physique.
 
 ## Tests et structure
 
@@ -163,7 +162,7 @@ Les secrets et données persistantes sont exclus du dépôt. Les identifiants so
 .venv/bin/python -m pytest -q
 ```
 
-Les tests utilisent des fixtures synthétiques et couvrent notamment l’historisation, les échecs partiels, l’authentification, CSRF, les documents, les restaurations et un vrai échange MCP stdio. Le workflow GitHub Actions fourni doit encore s’exécuter sur votre futur dépôt ; aucun badge de réussite n’est présumé.
+Les tests utilisent des fixtures synthétiques et couvrent notamment l’historisation, les échecs partiels, l’authentification, CSRF, les documents, les restaurations et un vrai échange MCP stdio.
 
 ```text
 src/hermes_school/
@@ -178,6 +177,6 @@ Voir [l’architecture](docs/ARCHITECTURE.md), [l’installation serveur](docs/I
 
 ## Licence et liens
 
-Code distribué sous [licence MIT](LICENSE). Les dépendances conservent leurs propres licences. Aucun code des clients ÉcoleDirecte tiers n’est incorporé ; les contrats consultés sont référencés dans [la recherche technique](docs/RESEARCH.md).
+Code distribué sous [licence MIT](LICENSE). Les dépendances conservent leurs propres licences. Aucun code des clients ÉcoleDirecte tiers n’est incorporé ; les contrats consultés sont référencés sur la base de la documentation publique et de l’usage conforme.
 
 Hermes School n’est affilié ni à ÉcoleDirecte/Aplim ni à Nous Research. Hermes Agent est un projet distinct : [documentation officielle](https://hermes-agent.nousresearch.com/docs).
